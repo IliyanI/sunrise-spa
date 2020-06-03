@@ -28,19 +28,20 @@ import StepBillingAddressForm from './components/checkout/StepBillingAddressForm
 import StepShippingMethodForm from './components/checkout/StepShippingMethodForm/index.vue';
 import StepPaymentMethodForm from './components/checkout/StepPaymentMethodForm/index.vue';
 import StepPlaceOrderForm from './components/checkout/StepPlaceOrderForm/index.vue';
-import { pageFromRoute } from './components/common/shared';
+import PageStores from './components/stores/PageStores/index.vue';
+import {pageFromRoute} from './components/common/shared';
 import Root from './components/root/index.vue';
 
 
 Vue.use(Router);
 
-const requiresAuth = true;
-const requiresCart = true;
+const requiresAuth=true;
+const requiresCart=true;
 
-const router = new Router({
+const router=new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  scrollBehavior: () => ({ x: 0, y: 0 }),
+  scrollBehavior: () => ({x: 0, y: 0}),
   routes: [
     {
       path: `/:locale(${Object.keys(config.languages).join('|')})?`,
@@ -58,6 +59,11 @@ const router = new Router({
         {
           path: 'stores',
           name: 'stores',
+          components: {
+            default: PageStores,
+            header: TheHeader,
+            footer: TheFooter,
+          },
         },
         {
           path: 'login',
@@ -105,7 +111,7 @@ const router = new Router({
         },
         {
           path: 'user',
-          meta: { requiresAuth },
+          meta: {requiresAuth},
           components: {
             default: PageUserAccount,
             header: TheHeader,
@@ -153,7 +159,7 @@ const router = new Router({
         },
         {
           path: 'checkout',
-          meta: { requiresCart },
+          meta: {requiresCart},
           components: {
             default: PageCheckout,
             header: TheCheckoutHeader,
@@ -197,19 +203,19 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const routeRequiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (routeRequiresAuth && !store.state.authenticated) {
-    next({ name: 'login' });
+  const routeRequiresAuth=to.matched.some(record => record.meta.requiresAuth);
+  if (routeRequiresAuth&&!store.state.authenticated) {
+    next({name: 'login'});
   } else {
     next();
   }
 });
 
 router.beforeEach(async (to, from, next) => {
-  const routeRequiresCart = to.matched.some(record => record.meta.requiresCart);
+  const routeRequiresCart=to.matched.some(record => record.meta.requiresCart);
   if (routeRequiresCart) {
-    const hasCart = await apollo.defaultClient
-      .query({ query: gql`{ me { activeCart { id } } }` })
+    const hasCart=await apollo.defaultClient
+      .query({query: gql`{ me { activeCart { id } } }`})
       .then(result => !!result.data.me.activeCart);
     if (!hasCart) next('/');
   }
