@@ -36,12 +36,16 @@ export default {
     languages() {
       const configLangs = this.$sunrise.languages;
       const langs = configLangs ? Object.entries(configLangs) : [];
-      return langs.map(([id, name]) => ({ id, name }));
+      const result = langs.map(([id, name]) => ({ id, name }));
+      console.log(result);
+      return result;
     },
     countries() {
       const configCountries = this.$sunrise.countries;
       const countries = configCountries ? Object.entries(configCountries) : [];
-      return countries.map(([id, name]) => ({ id, name }));
+      const result = countries.map(([id, name]) => ({ id, name }));
+      console.log(result);
+      return result;
     },
   },
   methods: {
